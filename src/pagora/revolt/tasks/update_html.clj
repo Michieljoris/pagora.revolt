@@ -1,7 +1,6 @@
 (ns pagora.revolt.tasks.update-html
   (:require
    [revolt.utils :as utils]
-   [environ.core :as env]
    [clojure.string :as str]
    [jansi-clj.core :as jansi :refer :all :exclude [reset]]
    [clojure.pprint :refer [pprint]]))
