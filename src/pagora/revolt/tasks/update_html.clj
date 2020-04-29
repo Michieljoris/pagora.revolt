@@ -21,11 +21,12 @@
         app-js-ph "<!--app-js-ph-->"
         build-json-ph "<!--build.json-->"
         app-name-ph "<!--app-name-->"
+        tag (str/replace tag "\n" "")
         html-string
         (cond-> html-string
           app-name (str/replace app-name-ph app-name)
-          bugsnag-api-key-frontend (str/replace bugsnag-ph
-                                                (bugsnag-link-tag bugsnag-api-key-frontend :prod version))
+          ;; bugsnag-api-key-frontend (str/replace bugsnag-ph
+          ;;                                       (bugsnag-link-tag bugsnag-api-key-frontend :prod version))
           include-build-info-in-html (str/replace build-json-ph (str "<script>window.build={version:\"" version
                                                                      "\",branch:\"" branch
                                                                      "\",tag:\"" tag
@@ -56,3 +57,4 @@
 ;;                               :bugsnag-api-key-frontend "123"}
 ;;                        }
 ;;         nil)
+(str/replace "ab\n" "\n" "z")
