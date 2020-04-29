@@ -16,9 +16,8 @@
     file))
 
 (defn invoke
-  [ctx {:keys [source-path output-dir file sass-options]} classpaths target]
-
-  (let [assets-path (utils/ensure-relative-path target (str "assets" File/separator output-dir))
+  [ctx {:keys [source-path output-path file sass-options]} classpaths target]
+  (let [assets-path (utils/ensure-relative-path target (str "assets" File/separator output-path))
         source-path (Paths/get source-path (make-array String 0))]
 
     ;; ensure target is created
@@ -29,8 +28,8 @@
 
     ;; NOTE: When using file without .toString this errors can happen:
     ;; ERROR | No implementation of method: :as-file of protocol: #'clojure.java.io/Coercions found for class: sun.nio.fs.UnixPath
-    (let [file (when file (io/file (.toString file)))
-
+    (let [;; file (when file (io/file (.toString file)))
+          file (when file (io/file file))
           partial? (and file (.startsWith (.getName file) "_"))
           path (if partial?
                  (.toFile source-path)
