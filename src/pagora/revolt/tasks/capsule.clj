@@ -145,7 +145,7 @@
   "Builds a jar which is essentially a capsule of preconfigured type."
 
   [^JarOutputStream jar-stream application classpath caplets capsule-type {:keys [aot? before-pack-fns]}]
-  (let [classpaths (str/split classpath (re-pattern File/pathSeparator))]
+  (let [classpaths (distinct (str/split classpath (re-pattern File/pathSeparator)))]
 
     (-> jar-stream
         (add-capsule-class)

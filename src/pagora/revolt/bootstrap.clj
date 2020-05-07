@@ -44,6 +44,16 @@
 
 )
 
+(defn load-config
+  [config-resource]
+  (when config-resource
+    (try
+      (timbre/info "Configuration loaded from" config-resource)
+      (read-string (slurp config-resource))
+      (catch Exception ex
+        (timbre/error (.getMessage ex))
+        (System/exit -1)))))
+
 
 (defn -main
   [& args]
@@ -55,7 +65,7 @@
     (timbre/info "REVOLT params")
     (timbre/info :#pp params)
     ;; (timbre/info (jansi/white (str "ENVIRONMENT: " environment)))
-
-    (apply revolt/-main args))
+    (with-redefs [revolt/load-config load-config]
+      (apply revolt/-main args)))
 
   )
