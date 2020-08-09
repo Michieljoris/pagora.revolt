@@ -1,0 +1,4 @@
+
+This repo contains some new and customized tasks and plugins for the clojure [[https://github.com/mbuczko/revolt][revolt]] build tool.
+
+Used in the fullstack app framework [[https://github.com/Michieljoris/pagora.aum/][aum]].
