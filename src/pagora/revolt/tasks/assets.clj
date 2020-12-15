@@ -52,14 +52,15 @@
 
 (defn fingerprint
   "Fingerprinting resources"
-  [path public-path]
+  [path public-path fingerprint?]
   (let [assets-file (io/file path public-path)
-        assets-path (.toPath assets-file)]
+        assets-path (.toPath assets-file)
+        get-name (if fingerprint? hashed-name #(.getName %))  ]
     (filter
      (complement nil?)
      (for [file (file-seq assets-file)
            :when (and (.isFile file) (not (.endsWith (.getName file) ".DS_Store")))
-           :let  [destination (io/file (.getParent file) (hashed-name file))]]
+           :let  [destination (io/file (.getParent file) (get-name file))]]
        (when (.renameTo file destination)
          (log/infof "%s => %s" file destination)
          [(str (.relativize assets-path (.toPath file)))
@@ -110,7 +111,7 @@
     (apply io/copy input output opts)))
 
 (defn invoke
-  [ctx {:keys [assets-paths exclude-paths update-with-exts options public-path gzip]} classpaths target]
+  [ctx {:keys [assets-paths exclude-paths update-with-exts options public-path gzip? fingerprint?]} classpaths target]
   (let [assets-path (utils/ensure-relative-path target "assets")
         extensions (map #(str "." (.toLowerCase %)) update-with-exts)]
 
@@ -121,8 +122,8 @@
 
     (let [assets-kv (utils/timed
                      "FINGERPRINTING"
-                     (into {} (fingerprint assets-path public-path)))
-          assets-kv (if gzip
+                     (into {} (fingerprint assets-path public-path fingerprint?)))
+          assets-kv (if gzip?
                       (utils/timed
                        "GZIPPING"
                        (let [assets-path (str assets-path "/" public-path "/")]
